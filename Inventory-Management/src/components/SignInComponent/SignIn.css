@@ -16,3 +16,7 @@
     .icon-black:hover {
       color: #0056b3; 
     }
+
+    .is-invalid {
+    border: 1px solid red !important;
+    }
