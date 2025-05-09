@@ -15,19 +15,21 @@ const Login = () => {
   const handleSubmit =  async (e) => {
     e.preventDefault();
 
-    const email = e.target.email.value;
+    const username = e.target.username.value;
     const password = e.target.password.value;
 
     // try and catch block
      try {
     const response = await axios.post('http://localhost:8080/api/auth/login', {
-      email,
+      username,
       password
     });
 
-    console.log('Login successful', response.data);
-    // Redirect to the dashboard
-    navigate('/dashboard');
+    if (response.status === 200) {
+      localStorage.setItem('isAuthenticated', 'true');
+      console.log('Login successful', response.data);
+      navigate('/dashboard');
+    }
 
 
     } catch(errors) {
@@ -51,7 +53,7 @@ const Login = () => {
           <div className="col-12 col-md-6">
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <input type="email"  name="email" className="form-control border-color black" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder='Email' />
+                <input type="username"  name="username" className="form-control border-color black"   placeholder='Username' />
               </div>
               <div className="mb-3">
                 <input type="password"  name="password" className="form-control border-color" id="exampleInputPassword1" placeholder='Password' />

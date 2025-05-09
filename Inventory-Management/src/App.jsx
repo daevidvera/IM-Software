@@ -5,8 +5,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import WelcomePage from './components/WelcomePageComponent/WelcomePage';
 import Login from './components/LoginComponent/Login';
 import SignIn from './components/SignInComponent/SignIn';
-import Verification from './components/VerificationComponent/Verification';
-import Dashboard from './components/DashboardComponent/Dashboard';
+import Dashboard from './components/ProtectedComponents/DashboardComponent/Dashboard';
+import ProtectedRoute from './components/ProtectedComponents/ProtectedRouterComponent/ProtectedRoute';
 
 
 function App() {
@@ -18,8 +18,13 @@ function App() {
         <Route path ='/' element={<WelcomePage/>}/>
         <Route path ='/login' element={<Login/>}/>
         <Route path ='/signin' element={<SignIn/>}/>
-        <Route path ='/verify' element={<Verification/>}/>
-        <Route path ='/dashboard' element={<Dashboard/>}/>
+        
+        {/* Protected Route */}
+        <Route path ='/dashboard' element={
+          <ProtectedRoute>
+            <Dashboard/>
+          </ProtectedRoute>
+        }/>
         </Routes>
       </BrowserRouter>
     </>
