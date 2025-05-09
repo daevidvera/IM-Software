@@ -6,6 +6,7 @@ import WelcomePage from './components/WelcomePageComponent/WelcomePage';
 import Login from './components/LoginComponent/Login';
 import SignIn from './components/SignInComponent/SignIn';
 import Verification from './components/VerificationComponent/Verification';
+import Dashboard from './components/DashboardComponent/Dashboard';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path ='/login' element={<Login/>}/>
         <Route path ='/signin' element={<SignIn/>}/>
         <Route path ='/verify' element={<Verification/>}/>
+        <Route path ='/dashboard' element={<Dashboard/>}/>
         </Routes>
       </BrowserRouter>
     </>
