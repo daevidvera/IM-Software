@@ -33,8 +33,11 @@ const Login = () => {
 
 
     } catch(errors) {
-    console.error('Error logging in', errors);
-    setErrors("Can't log in, please check your email and password");
+      if (errors.response && errors.response.data && errors.response.data.error) {
+    setErrors(errors.response.data.error);  // error message from the server
+    } else {
+      setErrors("Can't log in, please try again later.");
+    }
   }
   } 
 

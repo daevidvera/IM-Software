@@ -7,6 +7,8 @@ import Login from './components/LoginComponent/Login';
 import SignIn from './components/SignInComponent/SignIn';
 import Dashboard from './components/ProtectedComponents/DashboardComponent/Dashboard';
 import ProtectedRoute from './components/ProtectedComponents/ProtectedRouterComponent/ProtectedRoute';
+import Verify from './components/VerifyComponent/Verify';
+
 
 
 function App() {
@@ -18,7 +20,7 @@ function App() {
         <Route path ='/' element={<WelcomePage/>}/>
         <Route path ='/login' element={<Login/>}/>
         <Route path ='/signin' element={<SignIn/>}/>
-        
+        <Route path ="/req/signup/verify" element={<Verify/>}/>
         {/* Protected Route */}
         <Route path ='/dashboard' element={
           <ProtectedRoute>

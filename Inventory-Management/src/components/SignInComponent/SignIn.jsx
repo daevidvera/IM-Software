@@ -80,9 +80,8 @@ const SignIn = () => {
         password
       });
       console.log('Sign up successful', response.data);
-      localStorage.setItem('isAuthenticated', 'true');
-      // Redirect to the dashboard
-      navigate('/dashboard');
+      alert("Registration successful! Please check your email to verify your account before logging in.");
+      navigate('/login');
 
     }  catch (error) {
     console.error('Error signing up', error);

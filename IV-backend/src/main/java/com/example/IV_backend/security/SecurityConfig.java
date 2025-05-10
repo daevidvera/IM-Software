@@ -49,22 +49,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                // Disable CSRF (Cross-Site Request Forgery) protection
+
                 .csrf(csrf -> csrf.disable())
 
-                // Configure which requests are allowed without authentication
                 .authorizeHttpRequests(auth -> auth
-                        // Allow anyone (even unauthenticated users) to POST to /api/auth/login
                         .requestMatchers("/api/auth/login").permitAll()
-                        // Allow
                         .requestMatchers("/req/signup").permitAll()
-
-                        // All other requests require the user to be authenticated
+                        .requestMatchers("/req/signup/verify").permitAll()
+                        .requestMatchers("/req/reset-password").permitAll()
+                        .requestMatchers("/login/forgot-password").permitAll()
                         .anyRequest().authenticated()
                 )
 
-                // Configure session management to be stateless
-                // This means Spring Security won’t create or use HTTP sessions
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 org.springframework.security.config.http.SessionCreationPolicy.STATELESS
@@ -72,7 +68,7 @@ public class SecurityConfig {
                 )
 
                 .authenticationProvider(authenticationProvider())
-                // finalizing
                 .build();
     }
+
 }
