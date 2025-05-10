@@ -23,4 +23,14 @@ public class User_app {
     @Column(nullable = false)
     private String password;
 
+    private String verificationToken;
+
+    @Column(name = "is_verified", nullable = false)
+    private boolean isVerified = false;
+
+
+    @Column(name = "reset_token")
+    private String resetToken;
+
+
 }

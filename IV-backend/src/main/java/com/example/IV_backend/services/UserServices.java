@@ -25,10 +25,14 @@ public class UserServices implements UserDetailsService {
         Optional<User_app> user = userRepository.findByUsername(username);
 
         if (user.isPresent()) {
-            var UserObj = user.get();
+            var userObj = user.get();
+
+            if (!userObj.isVerified()) {
+                throw new RuntimeException("Email not verified");
+            }
             return User.builder()
-                    .username(UserObj.getUsername())
-                    .password(UserObj.getPassword())
+                    .username(userObj.getUsername())
+                    .password(userObj.getPassword())
                     .build();
         } else {
             throw new UsernameNotFoundException("User not found" + username);

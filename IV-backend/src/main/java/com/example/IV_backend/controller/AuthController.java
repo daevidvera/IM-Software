@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     @Autowired
@@ -28,6 +27,10 @@ public class AuthController {
 
         if (userOpt.isPresent()) {
             User_app user = userOpt.get(); // we get it
+
+            if (!user.isVerified()) {
+                return ResponseEntity.status(403).body(Map.of("error", "Email not verified"));
+            }
 
             if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 return ResponseEntity.ok(Map.of("message", "Login successful"));
