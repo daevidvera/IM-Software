@@ -8,6 +8,8 @@ import SignIn from './components/SignInComponent/SignIn';
 import Dashboard from './components/ProtectedComponents/DashboardComponent/Dashboard';
 import ProtectedRoute from './components/ProtectedComponents/ProtectedRouterComponent/ProtectedRoute';
 import Verify from './components/VerifyComponent/Verify';
+import ForgotPassword from './components/LoginComponent/PasswordComponents/ForgotPassword';
+import ResetPassword from './components/LoginComponent/PasswordComponents/ResetPassword';
 
 
 
@@ -21,6 +23,8 @@ function App() {
         <Route path ='/login' element={<Login/>}/>
         <Route path ='/signin' element={<SignIn/>}/>
         <Route path ="/req/signup/verify" element={<Verify/>}/>
+        <Route path="/login/forgot-password" element={<ForgotPassword />} />
+        <Route path="/req/reset-password" element={<ResetPassword />} />
         {/* Protected Route */}
         <Route path ='/dashboard' element={
           <ProtectedRoute>

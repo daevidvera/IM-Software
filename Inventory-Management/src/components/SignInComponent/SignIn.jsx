@@ -18,10 +18,15 @@ const SignIn = () => {
   rePassword: false
   });
 
-  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // stops the page from refreshing
+
+     if (isSubmitting) return;
 
     const username = e.target.username.value;
     const email = e.target.email.value;
@@ -66,12 +71,15 @@ const SignIn = () => {
       return;
     }
 
-    //checking if password is empty
-    if (password.length <= 0) {
-      setErrors("Password is required");
+    const passwordRegex = /^(?=.*[A-Z]).{5,}$/;
+
+    if (!passwordRegex.test(password)) {
+      setErrors("Password must be at least 5 characters and contain at least one uppercase letter.");
       setFieldErrors(prev => ({ ...prev, password: true }));
       return;
     }
+
+     setIsSubmitting(true);
 
     try {
       const response = await axios.post('http://localhost:8080/req/signup', {
@@ -129,13 +137,19 @@ const SignIn = () => {
                   aria-describedby="emailHelp" 
                   placeholder='Email' />
                 </div>
-                <div className="mb-3">
-                  <input 
-                  type="password" 
-                  name='password' 
-                  className={`form-control border-color black ${fieldErrors.password ? 'is-invalid' : ''}`}
-                  id="exampleInputPassword1" 
-                  placeholder='Password' />
+                <div className="mb-3 position-relative">
+                    <input 
+                      type={showPassword ? 'text' : 'password'} 
+                      name="password"
+                      className={`form-control border-color black ${fieldErrors.password ? 'is-invalid' : ''}`}
+                      id="exampleInputPassword1" 
+                      placeholder="Password"
+                    />
+                    <i
+                      className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'} position-absolute top-50 end-0 translate-middle-y me-3`}
+                      style={{ cursor: 'pointer', fontSize: '1.2rem', zIndex: 2 }}
+                      onClick={() => setShowPassword(prev => !prev)}
+                    ></i>
                 </div>
                 <div className="mb-3">
                   <input 
@@ -146,7 +160,13 @@ const SignIn = () => {
                   placeholder=' Re-Type Password' />
                 </div>
                 {errors && <p className="text-danger mb-2">{errors}</p>}
-                <button type="submit" className="btn-color dark w-100 mb-3" >Sign In</button>
+                <button 
+                type="submit" 
+                className="btn-color dark w-100 mb-3"  
+                disabled={isSubmitting}>
+                 {isSubmitting ? 'Submitting...' : 'Sign In'}
+                </button>
+                
               </form>      
             </div>
           </div>

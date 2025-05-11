@@ -39,25 +39,26 @@ public class EmailServices {
 
     private void SendEmail(String email, String token, String subject, String path, String message) {
         try {
-
-            //verify
             String actionUrl = "http://localhost:5173/" + path + "?token=" + token;
 
-            // html
+            String buttonLabel = subject.toLowerCase().contains("reset") ? "Reset Password" : "Verify Email";
+
             String content = """
-            <html>
-              <body style="font-family: Arial, sans-serif; line-height: 1.6;">
-                <h2 style="color: #2e6c80;">%s</h2>
-                <p>%s</p>
-                <a href="%s" style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; 
-                   color: white; text-decoration: none; border-radius: 5px;">
-                   Verify Email
-                </a>
-                <p>If the button doesn't work, click or copy this link into your browser:</p>
-                <p><a href="%s">%s</a></p>
-              </body>
-            </html>
-            """.formatted(subject, message, actionUrl, actionUrl, actionUrl);
+        <html>
+          <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 40px;">
+            <div style="max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
+              <h2 style="color: #2e6c80;">%s</h2>
+              <p>%s</p>
+              <a href="%s" style="display: inline-block; padding: 12px 25px; background-color: #4CAF50; 
+                 color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                 %s
+              </a>
+              <p style="margin-top: 20px;">If the button doesn't work, copy and paste this link into your browser:</p>
+              <p><a href="%s">%s</a></p>
+            </div>
+          </body>
+        </html>
+        """.formatted(subject, message, actionUrl, buttonLabel, actionUrl, actionUrl);
 
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
@@ -65,7 +66,7 @@ public class EmailServices {
             helper.setTo(email);
             helper.setFrom(from);
             helper.setSubject(subject);
-            helper.setText(content, true); // true = HTML
+            helper.setText(content, true);
 
             mailSender.send(mimeMessage);
 
@@ -73,5 +74,6 @@ public class EmailServices {
             System.err.println("Failed to send email: " + e.getMessage());
         }
     }
+
 
 }
