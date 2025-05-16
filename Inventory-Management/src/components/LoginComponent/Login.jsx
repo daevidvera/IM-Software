@@ -30,6 +30,7 @@ const Login = () => {
 
     if (response.status === 200) {
       localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('username', username);
       console.log('Login successful', response.data);
       navigate('/dashboard');
     }
