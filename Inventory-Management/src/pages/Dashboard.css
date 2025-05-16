@@ -1,0 +1,34 @@
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar-container {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .sidebar-container {
+    position: fixed;
+    transform: translateX(-100%);
+  }
+
+  .sidebar-container.show {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+}

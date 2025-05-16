@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import WelcomePage from './components/WelcomePageComponent/WelcomePage';
 import Login from './components/LoginComponent/Login';
 import SignIn from './components/SignInComponent/SignIn';
-import Dashboard from './components/ProtectedComponents/DashboardComponent/Dashboard';
+import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedComponents/ProtectedRouterComponent/ProtectedRoute';
 import Verify from './components/VerifyComponent/Verify';
 import ForgotPassword from './components/LoginComponent/PasswordComponents/ForgotPassword';
@@ -25,6 +25,7 @@ function App() {
         <Route path ="/req/signup/verify" element={<Verify/>}/>
         <Route path="/login/forgot-password" element={<ForgotPassword />} />
         <Route path="/req/reset-password" element={<ResetPassword />} />
+        
         {/* Protected Route */}
         <Route path ='/dashboard' element={
           <ProtectedRoute>
