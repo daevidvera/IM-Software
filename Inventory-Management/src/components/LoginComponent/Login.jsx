@@ -29,8 +29,14 @@ const Login = () => {
     
 
     if (response.status === 200) {
+       const token = response.data.token; 
+       const userId = response.data.userId; 
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('username', username);
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('token', token); 
+      //optional
+      localStorage.setItem('userId', response.data.userId);
       console.log('Login successful', response.data);
       navigate('/dashboard');
     }

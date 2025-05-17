@@ -1,11 +1,20 @@
 import React from 'react';
 import './Cards.css';
-
+import { useNavigate } from 'react-router-dom';
 const Cards = () => {
+    const navigate = useNavigate();
+
+    const handleInventoryClick = () => {
+        navigate("/dashboard/inventory");
+    };
+
+
   return (
     <div className="cards-wrapper">
       <div className="cards-container">
-        <div className="custom-card d-flex flex-row align-items-center p-3">
+
+
+        <div className="custom-card d-flex flex-row align-items-center p-3"  onClick={handleInventoryClick}>
           <div className="icon-wrapper me-3">
             <i className="bi bi-box-seam"></i>
           </div>
@@ -25,7 +34,7 @@ const Cards = () => {
 
          <div className="custom-card d-flex flex-row align-items-center p-3">
           <div className="icon-wrapper me-3">
-            <i class="bi bi-file-person"></i>
+            <i className="bi bi-file-person"></i>
           </div>
           <div className="card-body p-0">
             <h5 className="card-title mb-0">Employees</h5>
@@ -35,7 +44,7 @@ const Cards = () => {
 
         <div className="custom-card d-flex flex-row align-items-center p-3">
           <div className="icon-wrapper me-3">
-            <i class="bi bi-box-seam-fill"></i>
+            <i className="bi bi-box-seam-fill"></i>
           </div>
           <div className="card-body p-0">
             <h5 className="card-title mb-0">Orders</h5>
@@ -44,7 +53,7 @@ const Cards = () => {
 
         <div className="custom-card d-flex flex-row align-items-center p-3">
           <div className="icon-wrapper me-3">
-            <i class="bi bi-currency-dollar"></i>
+            <i className="bi bi-currency-dollar"></i>
           </div>
           <div className="card-body p-0">
             <h5 className="card-title mb-0">Profit</h5>
