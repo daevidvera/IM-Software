@@ -1,4 +1,4 @@
-package com.example.IV_backend.security;
+package com.example.IV_backend.utils;
 
 import com.example.IV_backend.services.UserServices;
 import com.example.IV_backend.utils.JwtTokenUtil;
@@ -35,14 +35,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
-        String username = JwtTokenUtil.extractEmail(token);
+        String username = JwtTokenUtil.extractUsername(token);
+
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             if (jwtTokenUtil.validateToken(token)) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+                authToken.setDetails(new org.springframework.security.web.authentication.WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
@@ -50,4 +54,5 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
 }

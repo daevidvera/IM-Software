@@ -3,6 +3,7 @@ package com.example.IV_backend.controller;
 import com.example.IV_backend.dto.LoginRequest;
 import com.example.IV_backend.model.User_app;
 import com.example.IV_backend.repository.UserRepository;
+import com.example.IV_backend.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,8 +34,14 @@ public class AuthController {
             }
 
             if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-                return ResponseEntity.ok(Map.of("message", "Login successful"));
+                String token = JwtTokenUtil.generateToken(user.getUsername());
+                return ResponseEntity.ok(Map.of(
+                        "token", token,
+                        "userId", user.getId()
+                ));
             }
+
+
             // we check if the password is equal to the password the user input in
         }
 

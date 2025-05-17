@@ -55,7 +55,7 @@ public class PasswordController {
 
         String email;
         try {
-            email = JwtTokenUtil.extractEmail(token);
+            email = JwtTokenUtil.extractUsername(token);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid or expired token."));
         }

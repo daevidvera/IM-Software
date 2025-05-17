@@ -9,32 +9,31 @@ import java.util.Date;
 
 @Component
 public class JwtTokenUtil {
-    //key encryption
-   private final static SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // Key encryption
+    private final static SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-   private final static long EXPIRATION_TIME = 86400000; // valid for a day
+    private final static long EXPIRATION_TIME = 86400000; // valid for a day
 
-    public static String generateToken(String email) {
+    // Store email in token
+    public static String generateToken(String username) {
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
                 .compact();
-
-
     }
 
-    public  boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         return !isTokenExpired(token);
     }
 
-    public static String extractEmail(String token) {
+
+    public static String extractUsername(String token) {
         JwtParser parser = Jwts.parserBuilder()
                 .setSigningKey(SECRET_KEY).build();
 
         return parser.parseClaimsJws(token).getBody().getSubject();
-
     }
 
     private boolean isTokenExpired(String token) {
@@ -46,5 +45,4 @@ public class JwtTokenUtil {
                 .setSigningKey(SECRET_KEY).build();
         return parser.parseClaimsJws(token).getBody().getExpiration();
     }
-
 }

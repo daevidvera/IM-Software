@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 // model of our User, what value it has on our database etc
 @Setter
 @Getter
@@ -31,6 +35,9 @@ public class User_app {
 
     @Column(name = "reset_token")
     private String resetToken;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InventoryItem> inventoryItems = new ArrayList<>();
 
 
 }
