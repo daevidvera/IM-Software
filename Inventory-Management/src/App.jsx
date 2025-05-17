@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedComponents/ProtectedRouterComp
 import Verify from './components/VerifyComponent/Verify';
 import ForgotPassword from './components/LoginComponent/PasswordComponents/ForgotPassword';
 import ResetPassword from './components/LoginComponent/PasswordComponents/ResetPassword';
+import Inventory from './pages/Inventory';
 
 
 
@@ -32,6 +33,15 @@ function App() {
             <Dashboard/>
           </ProtectedRoute>
         }/>
+
+        {/* Inventory */}
+        <Route path ='/dashboard/inventory' element={
+          <ProtectedRoute>
+            <Inventory/>
+          </ProtectedRoute>
+        }/>
+
+       
         </Routes>
       </BrowserRouter>
     </>

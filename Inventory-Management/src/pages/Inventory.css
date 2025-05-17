@@ -1,0 +1,97 @@
+/* Icon style for back button */
+.icon-black {
+  color: #343a40;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.icon-black:hover {
+  color: #0056b3;
+}
+
+/* Primary action button */
+.btn-color.dark {
+  background-color: #0056b3;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.btn-color.dark:hover {
+  background-color: #003f8f;
+}
+
+/* Refined search input */
+.input-group-text {
+  background-color: #f8f9fa;
+  border-right: none;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.15rem rgba(0, 86, 179, 0.2);
+  border-color: #0056b3;
+}
+
+.table thead th {
+  background-color: #f1f3f5;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+/* Zebra-strip effect */
+.table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Offcanvas styling like modal */
+.offcanvas-top {
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btn-edit {
+  background-color: #e7f1ff;
+  color: #0d6efd;
+  border: 1px solid #cfe2ff;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-edit:hover {
+  background-color: #d0e3ff;
+  color: #084298;
+}
+
+.btn-delete {
+  background-color: #ffeef0;
+  color: #dc3545;
+  border: 1px solid #f8d7da;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-delete:hover {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
