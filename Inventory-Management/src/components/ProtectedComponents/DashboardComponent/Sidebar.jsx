@@ -12,6 +12,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     navigate('/login');
   };
 
+  const handleInventory = () => { 
+    navigate("/dashboard/inventory");
+  }
+
+    const handleEmployee = () => { 
+    navigate("/dashboard/employees");
+  }
+
   return (
     <div className={`d-flex flex-column flex-shrink-0 p-3 sidebar-container ${isOpen ? 'show' : ''}`}>
       <h2 className="title text-center mb-4">Inventory.</h2>
@@ -36,12 +44,24 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             Dashboard
           </a>
         </li>
+
+        {/*  inventory  */}
         <li>
-          <a href="#" className="nav-link link-dark">
+          <a href="#" className="nav-link link-dark" onClick={handleInventory}>
             <i className="bi bi-box-seam me-2"></i>
             Inventory
           </a>
         </li>
+
+        {/* employees */}
+        <li>
+          <a href="#" className="nav-link link-dark" onClick={handleEmployee}>
+            <i className="bi bi-file-person me-2"></i>
+            Employees
+          </a>
+        </li>
+
+        
         <li>
           <a href="#" className="nav-link link-dark" onClick={handleLogout}>
             <i className="bi bi-box-arrow-right me-2"></i>

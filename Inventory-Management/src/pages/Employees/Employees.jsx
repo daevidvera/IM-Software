@@ -1,24 +1,29 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import './Employees.css';
 import { useNavigate } from 'react-router-dom';
-import './Inventory.css';
 import axios from 'axios';
 
 const FIELD_CONFIGS = [
-  { name: 'productName', label: 'Product Name', type: 'text' },
-  { name: 'category', label: 'Category', type: 'text' },
-  { name: 'priceBought', label: 'Price Bought', type: 'number' },
-  { name: 'sellingPrice', label: 'Selling Price', type: 'number' },
-  { name: 'quantity', label: 'Quantity', type: 'number' }
+  { name: 'name', label: 'Name', type: 'text' },
+  { name: 'email', label: 'Email', type: 'text' },
+  { name: 'salary', label: 'Salary', type: 'number' },
 ];
 
-const InventoryFormFields = ({ values = {}, onChange, isEdit = false }) => (
+const EmployeesFormFields = ({ values = {}, onChange, isEdit = false }) => (
   <>
     <div className="mb-3">
       <label className="form-label">{isEdit ? 'Current Image' : 'Image Upload'}</label>
-      {isEdit && values.photoURL && (
-        <img src={values.photoURL} alt="preview" className="img-thumbnail d-block mb-2" width="100" height="100" />
+      {isEdit && (
+        <img
+          src={values.photoURL || '/default-avatar.png'}
+          alt="preview"
+          className="img-thumbnail d-block mb-2"
+          width="100"
+          height="100"
+        />
       )}
       <input
+        name="image"
         type="file"
         accept="image/png, image/jpeg"
         onChange={onChange}
@@ -40,20 +45,20 @@ const InventoryFormFields = ({ values = {}, onChange, isEdit = false }) => (
   </>
 );
 
-const Inventory = () => {
+const Employees = () => {
   const navigate = useNavigate();
   const [editItem, setEditItem] = useState(null);
   const [editImageUrl, setEditImageUrl] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [inventoryItems, setInventoryItems] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [uploadedImageUrl, setUploadedImageUrl] = useState('');
   const token = localStorage.getItem('token');
   const headers = { Authorization: `Bearer ${token}` };
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/dashboard/inventory/user`, { headers })
-      .then((res) => setInventoryItems(res.data))
+      .get(`http://localhost:8080/dashboard/employees/user`, { headers })
+      .then((res) => setEmployees(res.data))
       .catch((err) => console.error(err));
   }, []);
 
@@ -61,8 +66,8 @@ const Inventory = () => {
 
   const handleDelete = useCallback(async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/dashboard/inventory/${id}`, { headers });
-      setInventoryItems((prev) => prev.filter((item) => item.productID !== id));
+      await axios.delete(`http://localhost:8080/dashboard/employees/${id}`, { headers });
+      setEmployees((prev) => prev.filter((item) => item.employeeID !== id));
     } catch (err) {
       console.error('Failed to delete item:', err);
     }
@@ -70,63 +75,78 @@ const Inventory = () => {
 
   const handleImageUpload = useCallback(async (e, isEdit = false) => {
     const formData = new FormData();
-    formData.append("image", e.target.files[0]);
+    formData.append('image', e.target.files[0]);
     try {
-      const res = await axios.post("http://localhost:8080/dashboard/inventory/upload", formData, {
-        headers: { ...headers, "Content-Type": "multipart/form-data" },
+      const response = await axios.post('http://localhost:8080/dashboard/employees/upload', formData, {
+        headers: { ...headers, 'Content-Type': 'multipart/form-data' },
       });
-      isEdit ? setEditImageUrl(res.data) : setUploadedImageUrl(res.data);
-    } catch (err) {
-      console.error("Image upload failed", err);
+      isEdit ? setEditImageUrl(response.data) : setUploadedImageUrl(response.data);
+    } catch (error) {
+      console.error('Image upload failed:', error);
     }
   }, [headers]);
 
   const handleAddItem = useCallback((e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-    data.photoURL = uploadedImageUrl;
-    axios.post(`http://localhost:8080/dashboard/inventory`, data, { headers })
+    const data = {
+      name: e.target.name.value,
+      email: e.target.email.value,
+      salary: e.target.salary.value,
+    };
+    if (uploadedImageUrl?.trim()) {
+      data.photoURL = uploadedImageUrl;
+    }
+    axios.post(`http://localhost:8080/dashboard/employees`, JSON.stringify(data), {
+      headers: { ...headers, 'Content-Type': 'application/json' },
+    })
       .then((res) => {
-        setInventoryItems(prev => [...prev, res.data]);
+        setEmployees((prev) => [...prev, res.data]);
         e.target.reset();
         setUploadedImageUrl('');
-        document.querySelector('#offcanvasCenter .btn-close').click();
+        document.querySelector('#offCanvasCenter .btn-close').click();
       })
       .catch((err) => console.error(err));
   }, [headers, uploadedImageUrl]);
 
   const handleEditItem = useCallback((e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const updatedData = Object.fromEntries(formData.entries());
-    updatedData.photoURL = editImageUrl;
-    axios.put(`http://localhost:8080/dashboard/inventory/${editItem.productID}`, updatedData, { headers })
+    const data = {
+      name: e.target.name.value,
+      email: e.target.email.value,
+      salary: e.target.salary.value,
+    };
+    if (editImageUrl?.trim()) {
+      data.photoURL = editImageUrl;
+    }
+    axios.put(`http://localhost:8080/dashboard/employees/${editItem.employeeID}`, JSON.stringify(data), {
+      headers: { ...headers, 'Content-Type': 'application/json' },
+    })
       .then((res) => {
-        setInventoryItems(prev => prev.map(item => item.productID === res.data.productID ? res.data : item));
+        setEmployees((prev) => prev.map((item) => (item.employeeID === editItem.employeeID ? res.data : item)));
+        e.target.reset();
+        setEditImageUrl('');
         document.querySelector('#editOffcanvas .btn-close').click();
       })
       .catch((err) => console.error(err));
   }, [headers, editImageUrl, editItem]);
 
-  const filteredItems = inventoryItems.filter((item) => {
-    const name = item?.productName?.toLowerCase?.() || '';
-    const category = item?.category?.toLowerCase?.() || '';
-    return name.includes(searchTerm.toLowerCase()) || category.includes(searchTerm.toLowerCase());
+  const filteredEmployees = employees.filter((employee) => {
+    const name = employee?.name?.toLowerCase?.() || '';
+    const email = employee?.email?.toLowerCase?.() || '';
+    const salary = employee?.salary?.toString?.() || '';
+    const search = searchTerm.toLowerCase();
+    return name.includes(search) || email.includes(search) || salary.includes(search);
   });
 
   return (
     <>
-      {/* go back */}
       <div className="position-absolute top-0 start-0 m-3">
         <i className="bi bi-arrow-left icon-black fs-4" onClick={handleBack} role="button"></i>
       </div>
 
-      {/* title */}
       <div className="container py-5">
-        <h1 className="text-center mb-4 fw-bold">My Inventory</h1>
+        <h1 className="text-center mb-4 fw-bold">My Employees</h1>
 
-        {/* search bar */}
         <div className="input-group flex-nowrap mb-4 shadow-sm rounded">
           <span className="input-group-text bg-white border-end-0">
             <i className="bi bi-search"></i>
@@ -134,43 +154,41 @@ const Inventory = () => {
           <input
             type="text"
             className="form-control border-start-0"
-            placeholder="Search by name or category"
+            placeholder="Search by name, email, or salary"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        {/* add item button */}
+
         <div className="text-end mb-4">
           <button
             type="button"
             className="btn-color dark w-100 mb-3"
             data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasCenter"
-            aria-controls="offcanvasCenter"
+            data-bs-target="#offCanvasCenter"
+            aria-controls="offCanvasCenter"
           >
-            Add Item
+            Add Employee
           </button>
         </div>
 
-        {/* offcanvas for adding new item */}
         <div className="offcanvas offcanvas-top rounded shadow-lg border-0"
           tabIndex="-1"
-          id="offcanvasCenter"
-          aria-labelledby="offcanvasCenterLabel"
+          id="offCanvasCenter"
+          aria-labelledby="offCanvasCenterLabel"
           style={{ top: '5%', height: 'auto', maxWidth: '600px', margin: '0 auto' }}>
           <div className="offcanvas-header">
-            <h5 className="offcanvas-title" id="offcanvasCenterLabel">Add New Inventory Item</h5>
+            <h5 className="offcanvas-title" id="offCanvasCenterLabel">Add New Employee</h5>
             <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div className="offcanvas-body">
             <form onSubmit={handleAddItem}>
-              <InventoryFormFields onChange={handleImageUpload} />
-              <button type="submit" className="btn btn-success w-100 shadow-sm rounded">Add Item</button>
+              <EmployeesFormFields onChange={handleImageUpload} />
+              <button type="submit" className="btn btn-success w-100 shadow-sm rounded">Add Employee</button>
             </form>
           </div>
         </div>
 
-        {/* inventory table */}
         <div className="table-responsive mt-5">
           <table className="table table-bordered table-hover align-middle shadow-sm rounded text-center">
             <thead className="table-light">
@@ -178,23 +196,27 @@ const Inventory = () => {
                 <th>ID</th>
                 <th>Name</th>
                 <th>Photo</th>
-                <th>Category</th>
-                <th>Price Bought</th>
-                <th>Selling Price</th>
-                <th>Quantity</th>
+                <th>Email</th>
+                <th>Salary</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredItems.map((item) => (
-                <tr key={item.productID}>
-                  <th>{item.productID}</th>
-                  <td>{item.productName}</td>
-                  <td><img src={item.photoURL} alt="item" className="img-thumbnail rounded" width="100" height="100" /></td>
-                  <td>{item.category}</td>
-                  <td>${item.priceBought.toFixed(2)}</td>
-                  <td>${item.sellingPrice.toFixed(2)}</td>
-                  <td>{item.quantity}</td>
+              {filteredEmployees.map((employee) => (
+                <tr key={employee.employeeID}>
+                  <th>{employee.employeeID}</th>
+                  <td>{employee.name}</td>
+                  <td>
+                    <img
+                      src={employee.photoURL || '/default-avatar.png'}
+                      alt="employee"
+                      className="img-thumbnail rounded"
+                      width="100"
+                      height="100"
+                    />
+                  </td>
+                  <td>{employee.email}</td>
+                  <td>${Number(employee.salary).toLocaleString()}</td>
                   <td>
                     <div className="d-flex gap-2">
                       <button
@@ -202,13 +224,13 @@ const Inventory = () => {
                         data-bs-toggle="offcanvas"
                         data-bs-target="#editOffcanvas"
                         onClick={() => {
-                          setEditItem(item);
-                          setEditImageUrl(item.photoURL);
+                          setEditItem(employee);
+                          setEditImageUrl(employee.photoURL);
                         }}
                       >
                         <i className="bi bi-pencil me-1"></i>Edit
                       </button>
-                      <button className="btn btn-sm btn-delete shadow-sm" onClick={() => handleDelete(item.productID)}>
+                      <button className="btn btn-sm btn-delete shadow-sm" onClick={() => handleDelete(employee.employeeID)}>
                         <i className="bi bi-trash me-1"></i>Delete
                       </button>
                     </div>
@@ -219,16 +241,15 @@ const Inventory = () => {
           </table>
         </div>
 
-        {/* offcanvas for editing item */}
         <div className="offcanvas offcanvas-end" tabIndex="-1" id="editOffcanvas" aria-labelledby="editOffcanvasLabel">
           <div className="offcanvas-header">
-            <h5 className="offcanvas-title" id="editOffcanvasLabel">Edit Inventory Item</h5>
+            <h5 className="offcanvas-title" id="editOffcanvasLabel">Edit Employee</h5>
             <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div className="offcanvas-body">
             {editItem && (
               <form onSubmit={handleEditItem}>
-                <InventoryFormFields
+                <EmployeesFormFields
                   values={{ ...editItem, photoURL: editImageUrl }}
                   onChange={(e) => handleImageUpload(e, true)}
                   isEdit
@@ -243,4 +264,4 @@ const Inventory = () => {
   );
 };
 
-export default Inventory;
+export default Employees;

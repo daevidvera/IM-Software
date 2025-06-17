@@ -11,6 +11,7 @@ import Verify from './components/VerifyComponent/Verify';
 import ForgotPassword from './components/LoginComponent/PasswordComponents/ForgotPassword';
 import ResetPassword from './components/LoginComponent/PasswordComponents/ResetPassword';
 import Inventory from './pages/Inventory';
+import Employees from './pages/Employees/Employees';
 
 
 
@@ -38,6 +39,13 @@ function App() {
         <Route path ='/dashboard/inventory' element={
           <ProtectedRoute>
             <Inventory/>
+          </ProtectedRoute>
+        }/>
+
+        {/* Employees */}
+        <Route path ='/dashboard/employees' element={
+          <ProtectedRoute>
+            <Employees/>
           </ProtectedRoute>
         }/>
 
