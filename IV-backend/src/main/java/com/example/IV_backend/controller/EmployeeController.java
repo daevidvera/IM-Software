@@ -23,7 +23,7 @@ import java.util.UUID;
 @CrossOrigin("*")
 @AllArgsConstructor
 @RestController
-@RequestMapping("/dashboard/employee")
+@RequestMapping("/dashboard/employees")
 public class EmployeeController {
 
     private final EmployeeServices employeeServices;
@@ -47,7 +47,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employee);
     }
 
-    // Get all inventory items for the authenticated user
+    // Get all employee items for the authenticated user
     @GetMapping("/user")
     public ResponseEntity<List<EmployeeDto>> getAllEmployeesForUser(Authentication auth) {
         String username = auth.getName();
@@ -56,7 +56,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeList);
     }
 
-    // Update inventory item
+    // Update employee
     @PutMapping("/{employeeId}")
     public ResponseEntity<EmployeeDto> updateEmployee(
             @PathVariable Long employeeId,
@@ -65,14 +65,14 @@ public class EmployeeController {
         return ResponseEntity.ok(updated);
     }
 
-    // Delete inventory item
+    // Delete employee item
     @DeleteMapping("/{employeeId}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long employeeId) {
         employeeServices.deleteEmployeeById(employeeId);
         return ResponseEntity.noContent().build();
     }
 
-    // Search inventory for the authenticated user
+    // Search employee for the authenticated user
     @GetMapping("/search")
     public ResponseEntity<List<EmployeeDto>> searchInventory(
             @RequestParam String keyword,

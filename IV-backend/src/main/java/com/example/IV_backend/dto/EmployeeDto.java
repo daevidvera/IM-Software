@@ -12,9 +12,10 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class EmployeeDto {
-    private Long id;
+    private Long employeeID;
     private String name;
     private String email;
-    private String employeePicture;
+    private String photoURL;
+    private Long salary;
 
 }

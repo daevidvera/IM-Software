@@ -27,6 +27,8 @@ public class Employee {
     @Column( name = "employee_picture")
     private String employeePicture;
 
+    @Column (name = "employee_salary")
+    private Long salary;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User_app user;

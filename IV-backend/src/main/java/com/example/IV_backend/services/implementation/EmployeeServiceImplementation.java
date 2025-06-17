@@ -45,7 +45,11 @@ public class EmployeeServiceImplementation  implements EmployeeServices {
 
         employee.setName(employeeDto.getName());
         employee.setEmail(employeeDto.getEmail());
-        employee.setEmployeePicture(employeeDto.getEmployeePicture());
+        employee.setSalary(employeeDto.getSalary());
+
+        if (employeeDto.getPhotoURL() != null && !employeeDto.getPhotoURL().isBlank()) {
+            employee.setEmployeePicture(employeeDto.getPhotoURL());
+        }
 
         Employee savedEmployee = employeeRepository.save(employee);
         return  EmployeeMapper.mapEmployeeDto(savedEmployee);
